@@ -41,7 +41,7 @@ public class TestSevlet extends HttpServlet {
 				
 		// Create a SQL statements
 		String sql = "select * from student";
-		myStmt = myConn.createStatement();
+		myStmt = myConn.createStatement();  
 		// Execute SQL Query
 		myRs = myStmt.executeQuery(sql);
 		// Procces the result set
