@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.*, web.jdbc.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core"%> 
 
 <!DOCTYPE html>
 <html>
@@ -8,12 +8,7 @@
 <title>Student Tracker App</title>
 	<link type="text/css" rel="stylesheet" href="CSS/style.css">
 </head>
-<%
-//get the students from  the request object (send by servlet)
-List<Student> theStudents=
-				(List<Student>)request.getAttribute("STUDENTS_LIST");
 
-%>
 
 <body>
 	<div id="wrapper">
@@ -32,18 +27,20 @@ List<Student> theStudents=
 					<th>Email</th>
 					<th>Scholarship</th>
 				
-					<% for (Student tempStudent : theStudents) { %>
+					<core:forEach var="tempStudent" items="${STUDENTS_LIST}">
 						<tr>
-							<td> <%=tempStudent.getFirstName() %> </td>
-							<td> <%=tempStudent.getLastName() %> </td>
-							<td> <%=tempStudent.getStudyPeriod() %> </td>
-							<td> <%=tempStudent.getStudyYear() %> </td>
-							<td> <%=tempStudent.getEmail() %> </td>
-							<td> <%=tempStudent.getScholarShip() %> </td>
+							<td> ${tempStudent.firstName } </td>
+							<td> ${tempStudent.lastName } </td>
+							<td> ${tempStudent.studyPeriod } </td>
+							<td> ${tempStudent.studyYear }</td>
+							<td> ${tempStudent.email }</td>
+							<td> <core:if test="${tempStudent.scholarShip==true}">Yes</core:if> 
+							     <core:if test="${tempStudent.scholarShip!=true}">No</core:if></td>
 						</tr>
-						<%} %>
+					</core:forEach>
+						
 				</table>
-		</div>
-	</div>
+		 </div>
+	 </div>
 </body>
 </html>
