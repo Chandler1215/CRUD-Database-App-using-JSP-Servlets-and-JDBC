@@ -5,7 +5,7 @@ public class Student {
 	private String firstName;
 	private String lastName;
 	private String studyPeriod;
-	private int studyYear;
+	private String studyYear;
 	private String email;
 	private boolean scholarShip;
 	
@@ -33,10 +33,10 @@ public class Student {
 	public void setStudyPeriod(String studyPeriod) {
 		this.studyPeriod = studyPeriod;
 	}
-	public int getStudyYear() {
+	public String getStudyYear() {
 		return studyYear;
 	}
-	public void setStudyYear(int studyYear) {
+	public void setStudyYear(String studyYear) {
 		this.studyYear = studyYear;
 	}
 	public String getEmail() {
@@ -52,16 +52,17 @@ public class Student {
 		this.scholarShip = scholarShip;
 	}
 	
-	public Student(String firstName, String lastName, String studyPeriod, int studyYear, String email,
-			String scholarShip, String scholarShipType) {
+	public Student(String firstName, String lastName, String studyPeriod, String studyYear, String email,
+			boolean scholarShip) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.studyPeriod = studyPeriod;
 		this.studyYear = studyYear;
 		this.email = email;
+		this.scholarShip = scholarShip;
 	}
-	public Student(int id, String firstName, String lastName, String studyPeriod, int studyYear, String email,
+	public Student(int id, String firstName, String lastName, String studyPeriod, String studyYear, String email,
 			boolean scholarShip) {
 		super();
 		this.id = id;
@@ -77,9 +78,4 @@ public class Student {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", studyPeriod="
 				+ studyPeriod + ", studyYear=" + studyYear + ", email=" + email + ", scholarShip=" + scholarShip + "]";
 	}
-	
-	
-	
-	
-	
 }

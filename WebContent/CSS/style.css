@@ -41,7 +41,27 @@ tr:nth-child(odd) {background: #BBBBBB}
 	font-weight: bold;
 	width: 120px; 
 	padding: 5px 10px; 
-	
+	vertical-align: middle;
 	margin-bottom: 15px;
 	background: #cccccc;
 }
+
+
+
+.button {
+	text-decoration: none;
+  	border: 1px solid #666; 
+	border-radius: 5px; 
+	padding: 4px; 
+	font-size: 12px;
+	font-weight: bold;
+	width: 120px; 
+	padding: 2px 4px; 
+	vertical-align: middle;
+	margin-bottom: 15px;
+	background: #cccccc;
+	padding-top: .2.5em;
+	padding-bottom: .0em;
+}
+
+a:visited{ color: #0066cc }

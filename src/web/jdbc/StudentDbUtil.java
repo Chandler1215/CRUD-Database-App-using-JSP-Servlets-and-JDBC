@@ -2,6 +2,7 @@ package web.jdbc;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.sql.PreparedStatement;
 import javax.sql.DataSource;
 
 public class StudentDbUtil {
-	private DataSource dataSource;
+	private static DataSource dataSource;
 	
 	public StudentDbUtil(DataSource theDataSource) {
 		dataSource = theDataSource;
@@ -43,7 +44,7 @@ public class StudentDbUtil {
 				String firstName = myRs.getString("first_name");
 				String lastName = myRs.getString("last_name");
 				String studyPeriod = myRs.getString("studyPeriod");
-				int studyYear = myRs.getInt("studyYear");
+				String studyYear = myRs.getString("studyYear");
 				String email = myRs.getString("email");
 				Boolean scholarShip = myRs.getBoolean("scholarShip");
 				
@@ -78,6 +79,140 @@ public class StudentDbUtil {
 					
 		}catch(Exception e) {
 			e.printStackTrace();
+		}
+		
+	}
+
+	public static void addStudent(Student theStudent) throws SQLException {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		try {
+		// get db connection
+			myConn = dataSource.getConnection();
+		// Create sql insert
+			String sql = "insert into student"
+					+ "(first_name, last_name, studyPeriod, studyYear, email, scholarShip)"
+					+ "values (?, ?, ?, ?, ?, ?)";
+			myStmt = myConn.prepareStatement(sql);
+		// set the param values for the student
+			myStmt.setString(1, theStudent.getFirstName());
+			myStmt.setString(2, theStudent.getLastName());
+			myStmt.setString(3, theStudent.getStudyPeriod());
+			myStmt.setString(4, theStudent.getStudyYear());
+			myStmt.setString(5, theStudent.getEmail());
+			myStmt.setBoolean(6, theStudent.getScholarShip());
+			
+		// execute sql insert
+			myStmt.execute();
+		}
+		finally {
+		// clean up JDBC object
+		
+		}
+		
+	}
+
+	public Student getStudent(String theStudentId) throws Exception {
+		Student theStudent = null;
+		
+		Connection myConn = null;
+		PreparedStatement myStmt= null;
+		ResultSet myRs = null;
+		int studentId;
+		
+		try {
+			// convert student id to int
+			studentId = Integer.parseInt(theStudentId);
+			// get connection to database
+			myConn = dataSource.getConnection();
+			// create sql to get selected student
+			String sql = "select * from student where id=?";
+			// create prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			// set params
+			myStmt.setInt(1, studentId);
+			// execute statement
+			myRs = myStmt.executeQuery();
+			// retrieve data from result set row
+			if(myRs.next()) {
+				String firstName = myRs.getString("first_name");
+				String lastName = myRs.getString("last_name");
+				String studyPeriod = myRs.getString("studyPeriod");
+				String studyYear = myRs.getString("studyYear");
+				String email = myRs.getString("email");
+				Boolean scholarShip = myRs.getBoolean("scholarShip");
+				
+				// use the studentId during construction
+				theStudent = new Student(studentId, firstName, lastName, studyPeriod, studyYear, email, scholarShip);
+			}else {
+				throw new Exception("Could not find student id:" + studentId);
+			}
+			return theStudent;
+		}finally{
+			
+		}
+		
+	}
+
+	public void updateStudent(Student theStudent) throws Exception{
+		
+		Connection myConn = null;
+		PreparedStatement myStmt= null;
+		ResultSet myRs = null;
+		
+		try {
+			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get selected student
+			String sql = "update student set first_name=?, last_name=?, studyPeriod=?, studyYear=?, email=?, scholarShip=? where id=? ";
+			
+			// create prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			// set params
+			myStmt.setString(1, theStudent.getFirstName());
+			myStmt.setString(2, theStudent.getLastName());
+			myStmt.setString(3, theStudent.getStudyPeriod());
+			myStmt.setString(4, theStudent.getStudyYear());
+			myStmt.setString(5, theStudent.getEmail());
+			myStmt.setBoolean(6, theStudent.getScholarShip());
+			myStmt.setInt(7, theStudent.getId());
+			
+			// execute statement
+			myStmt.execute();
+			
+			}finally{
+				// clean up JDBC object
+				close(myConn, myStmt, myRs);
+		}
+	}
+
+	public void deleteStudent(String theStudentId) throws Exception{
+		Connection myConn = null;
+		PreparedStatement myStmt= null;
+		
+		try {
+			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// parse int the id
+			int StudentId = Integer.parseInt(theStudentId);
+			// create sql to get selected student
+			String sql = "delete from student where id=?";
+			
+			// create prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			// set param
+			myStmt.setInt(1, StudentId);
+			
+			// execute statement
+			myStmt.execute();
+			
+			}finally{
+				// clean up JDBC object
+				close(myConn, myStmt, null);
 		}
 		
 	}
