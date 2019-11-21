@@ -8,6 +8,7 @@
 <title>Student Tracker App</title>
 	<link type="text/css" rel="stylesheet" href="CSS/style.css">
 	
+	
 </head>
 
 
@@ -23,9 +24,24 @@
 		<!-- Put new button: Add Student -->
 		<input type="button" value="Add Student"
 		onclick="window.location.href='add-student-form.jsp'; return false;"
-		class="add-student-button"
-		/>
-				<table border="1">
+		class="add-student-button"/>
+		
+		<!--  add a search box -->
+			<form action="StudentControllerServlet" method="GET">
+		
+				<input type="hidden" name="command" value="SEARCH" />
+			
+                Search student: <input type="text" name="theSearchName" />
+                
+                <input type="submit" value="Search" class="add-student-button" />
+            
+            </form>
+		
+		
+		
+		
+		</form>
+					<table border="1">
 					<th>First Name</th>
 					<th>Last name</th>
 					<th>Study Period</th>
@@ -75,6 +91,10 @@
 						
 				</table>
 		 </div>
-	 </div>
+	 </div> <br></br>
+	 <div>
+		<button onclick="window.location.href = 'StudentControllerServlet';" class="backButton">Back</button>
+		
+	</div>
 </body>
 </html>

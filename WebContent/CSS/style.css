@@ -64,4 +64,13 @@ tr:nth-child(odd) {background: #BBBBBB}
 	padding-bottom: .0em;
 }
 
+.backButton {
+	font-weight: bold;
+	width: 130px; 
+	padding: 5px 10px; 
+	background: #cccccc;
+	border-radius: 6px;
+	border: 1px solid #666;
+}
+
 a:visited{ color: #0066cc }

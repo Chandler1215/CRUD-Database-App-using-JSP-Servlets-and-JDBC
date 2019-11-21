@@ -149,7 +149,7 @@ public class StudentDbUtil {
 			}
 			return theStudent;
 		}finally{
-			
+			close(myConn, myStmt, myRs);
 		}
 		
 	}
@@ -214,6 +214,71 @@ public class StudentDbUtil {
 				// clean up JDBC object
 				close(myConn, myStmt, null);
 		}
+		
+	}
+
+	public List<Student> searchStudents(String theSearchName)  throws Exception {
+
+		List<Student> students = new ArrayList<>();
+		
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		
+		
+		try {
+			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+	        //
+	        // only search by name if theSearchName is not empty
+	        //
+			if (theSearchName != null && theSearchName.trim().length() > 0) {
+
+				// create sql to search for students by name
+				String sql = "select * from student where lower(first_name) like ? or lower(last_name) like ?";
+
+				// create prepared statement
+				myStmt = myConn.prepareStatement(sql);
+
+				// set params
+				String theSearchNameLike = "%" + theSearchName.toLowerCase() + "%";
+				myStmt.setString(1, theSearchNameLike);
+				myStmt.setString(2, theSearchNameLike);
+				
+			} else {
+				// create sql to get all students
+				String sql = "select * from student order by last_name";
+
+				// create prepared statement
+				myStmt = myConn.prepareStatement(sql);
+			}
+	        
+			// execute statement
+			myRs = myStmt.executeQuery();
+			
+			// retrieve data from result set row
+			while (myRs.next()) {
+					int id = myRs.getInt("id");
+					String firstName = myRs.getString("first_name");
+					String lastName = myRs.getString("last_name");
+					String studyPeriod = myRs.getString("studyPeriod");
+					String studyYear = myRs.getString("studyYear");
+					String email = myRs.getString("email");
+					Boolean scholarShip = myRs.getBoolean("scholarShip");
+					
+					// create new student obj
+					Student tempStudent = new Student(id, firstName, lastName, studyPeriod, studyYear, email, scholarShip);
+					
+					//add it to the list of students
+					students.add(tempStudent);
+				}
+				return students;
+				
+		}finally{ close(myConn, myStmt, myRs);}
+		
+		
 		
 	}
 }

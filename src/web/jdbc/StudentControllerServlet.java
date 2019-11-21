@@ -88,7 +88,16 @@ public class StudentControllerServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
-
+			
+		case "SEARCH":
+			try {
+				searchStudents(request, response);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			break;
+			
 		default:
 			try {
 				listStudents(request, response);
@@ -101,6 +110,23 @@ public class StudentControllerServlet extends HttpServlet {
 		// list the students .. in MVC
 
 	}
+
+	private void searchStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		// read search name from form data
+		String theSearchName = request.getParameter("theSearchName");
+		
+		// search students from db util
+		List<Student> students = studentDbUtil.searchStudents(theSearchName);
+		
+		// add students to the request
+		request.setAttribute("STUDENTS_LIST", students);
+				
+		// send to JSP page (view)
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/list-students.jsp");
+		dispatcher.forward(request, response);
+	}
+	
 
 	private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		 // read student id from form data
